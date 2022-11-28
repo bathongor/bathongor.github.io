@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import * as CANNON from "cannon-es";
+import * as THREE from "../node_modules/three";
+import * as CANNON from "../node_modules/cannon-es";
 import { ConvexGeometry } from "https://unpkg.com/three@0.122.0/examples/jsm/geometries/ConvexGeometry.js";
 import { SimplifyModifier } from "https://unpkg.com/three@0.122.0/examples/jsm/modifiers/SimplifyModifier.js";
 
