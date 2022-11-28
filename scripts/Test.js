@@ -2,6 +2,7 @@ import * as THREE from "three";
 import * as CANNON from "cannon-es";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import CannonDebugger from "cannon-es-debugger";
 import { bodyToMesh } from "./three-conversion-utils.js";
 
@@ -302,6 +303,9 @@ export default class Experience {
 
   loadGLTF = (path) => {
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("../node_modules/three/examples/js/libs/draco/");
+    loader.setDRACOLoader(dracoLoader);
     console.log("outisde callback", this.vehicle);
     loader.load(
       path,
