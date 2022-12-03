@@ -14,12 +14,19 @@ export default class Experience {
     }
     this.canvas = canvas;
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0xdddddd);
     this.initCamera();
     this.initRenderer();
     this.initLight();
     this.initCamControls();
     this.addPlane();
-    this.loadGLTF("/car.glb");
+    this.loadCar("/car.glb");
+    this.loadDoor("/door.glb");
+    this.loadBed("/bed.glb");
+    this.loadDesktop("/desktop_setup.glb");
+    this.loadLamp("/lamp.glb");
+    this.loadWindow("/window_open.glb");
+    // this.addBackground();
     this.initKeyEventListeners();
   }
 
@@ -111,8 +118,8 @@ export default class Experience {
   };
 
   initLight = () => {
-    this.light = new THREE.PointLight(0xffffff, 1.0, 100);
-    this.light.position.set(-20, 20, 20);
+    this.light = new THREE.PointLight(0xffffff, 1.0, 200);
+    this.light.position.set(0, 30, 0);
     this.light.castShadow = true;
     this.light.shadow.mapSize.width = 2048;
     this.light.shadow.mapSize.height = 2048;
@@ -252,7 +259,7 @@ export default class Experience {
       for (let j = 0; j < sizeZ; j++) {
         if (i === 0 || i === sizeX - 1 || j === 0 || j === sizeZ - 1) {
           // const height = 3;
-          matrix[i].push(50);
+          matrix[i].push(100);
           continue;
         }
         matrix[i].push(1);
@@ -301,12 +308,11 @@ export default class Experience {
     this.cannonDebugger = new CannonDebugger(this.scene, this.world);
   };
 
-  loadGLTF = (path) => {
+  loadCar = (path) => {
     const loader = new GLTFLoader();
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath("./draco/");
     loader.setDRACOLoader(dracoLoader);
-    console.log("outisde callback", this.vehicle);
     loader.load(
       path,
       (gltf) => {
@@ -316,6 +322,7 @@ export default class Experience {
         });
         this.glb.position.y = 5;
         this.glb.rotateX(Math.PI / 2);
+        this.glb.receiveShadow = true;
 
         this.scene.add(gltf.scene);
         this.initPhysics();
@@ -330,13 +337,197 @@ export default class Experience {
     );
   };
 
+  loadDoor = (path) => {
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("./draco/");
+    loader.setDRACOLoader(dracoLoader);
+    loader.load(
+      path,
+      (gltf) => {
+        let door = gltf.scene;
+        door.traverse((node) => {
+          if (node.isMesh) node.castShadow = true;
+        });
+        door.position.x = 47.5;
+        door.position.y = 20;
+        door.rotateY(Math.PI / 2);
+        this.scene.add(door);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
+  loadBed = (path) => {
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("./draco/");
+    loader.setDRACOLoader(dracoLoader);
+    loader.load(
+      path,
+      (gltf) => {
+        let bed = gltf.scene;
+        bed.traverse((node) => {
+          if (node.isMesh) node.castShadow = true;
+        });
+        bed.position.x = -34;
+        bed.position.y = 6;
+        bed.position.z = -33;
+        bed.rotateY(Math.PI / 2);
+        this.scene.add(bed);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
+  loadDesktop = (path) => {
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("./draco/");
+    loader.setDRACOLoader(dracoLoader);
+    loader.load(
+      path,
+      (gltf) => {
+        let desktop = gltf.scene;
+        desktop.traverse((node) => {
+          if (node.isMesh) node.castShadow = true;
+        });
+        desktop.position.x = 34;
+        desktop.position.y = 15;
+        desktop.position.z = -29;
+        // desktop.rotateY(Math.PI / 2);
+        desktop.scale.set(6, 6, 6);
+        this.scene.add(desktop);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
+  loadLamp = (path) => {
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("./draco/");
+    loader.setDRACOLoader(dracoLoader);
+    loader.load(
+      path,
+      (gltf) => {
+        let lamp = gltf.scene;
+        lamp.traverse((node) => {
+          if (node.isMesh) node.castShadow = true;
+        });
+        lamp.position.z = 7;
+        lamp.position.y = 20;
+        // desktop.rotateY(Math.PI / 2);
+        lamp.scale.set(10, 10, 10);
+        this.scene.add(lamp);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
+  loadWindow = (path) => {
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath("./draco/");
+    loader.setDRACOLoader(dracoLoader);
+    loader.load(
+      path,
+      (gltf) => {
+        let window = gltf.scene;
+        window.traverse((node) => {
+          if (node.isMesh) node.castShadow = true;
+        });
+        window.position.z = 80;
+        window.position.x = 15;
+        window.position.y = 8;
+        window.rotateY(Math.PI);
+        window.scale.set(20, 20, 20);
+        this.scene.add(window);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  };
+
   addPlane = () => {
-    const planeGeometry = new THREE.PlaneGeometry(300, 300);
-    const planeMaterial = this.createFloorMaterial();
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotateX((3 / 2) * Math.PI);
-    plane.receiveShadow = true;
-    this.scene.add(plane);
+    // Added Floor
+    const floorGeometry = new THREE.PlaneGeometry(100, 100);
+    const floorMaterial = this.createFloorMaterial();
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotateX((3 / 2) * Math.PI);
+    floor.receiveShadow = true;
+    this.scene.add(floor);
+
+    // Added walls
+    const wallGeometry = new THREE.PlaneGeometry(97.5, 50);
+    const wallMaterial = this.createWallMaterial();
+    const wall1 = new THREE.Mesh(wallGeometry, wallMaterial);
+    const wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
+    const wall3 = new THREE.Mesh(wallGeometry, wallMaterial);
+    const wall4 = new THREE.Mesh(wallGeometry, wallMaterial);
+    const ceilingGeometry = new THREE.PlaneGeometry(100, 100);
+    const ceiling = new THREE.Mesh(ceilingGeometry, wallMaterial);
+    wall1.translateY(25);
+    wall1.translateZ(-47);
+    wall2.translateY(25);
+    wall2.translateZ(48.5);
+    wall2.rotateY(Math.PI);
+    wall3.translateY(25);
+    wall3.translateX(47);
+    wall3.rotateY((3 / 2) * Math.PI);
+    wall4.translateY(25);
+    wall4.translateX(-48.5);
+    wall4.rotateY((1 / 2) * Math.PI);
+    ceiling.translateY(50);
+    ceiling.rotateX((1 / 2) * Math.PI);
+
+    wall1.receiveShadow = true;
+    wall2.receiveShadow = true;
+    wall3.receiveShadow = true;
+    wall4.receiveShadow = true;
+    ceiling.receiveShadow = true;
+    this.scene.add(wall1);
+    this.scene.add(wall2);
+    this.scene.add(wall3);
+    this.scene.add(wall4);
+    this.scene.add(ceiling);
+  };
+
+  addBackground = () => {
+    let bgMesh;
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(
+      "https://r105.threejsfundamentals.org/threejs/resources/images/equirectangularmaps/tears_of_steel_bridge_2k.jpg"
+    );
+    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearFilter;
+
+    const shader = THREE.ShaderLib.equirect;
+    const material = new THREE.ShaderMaterial({
+      fragmentShader: shader.fragmentShader,
+      vertexShader: shader.vertexShader,
+      uniforms: shader.uniforms,
+      depthWrite: false,
+      side: THREE.BackSide,
+    });
+    material.uniforms.tEquirect.value = texture;
+    const plane = new THREE.BoxBufferGeometry(1000, 1000, 1000);
+    bgMesh = new THREE.Mesh(plane, material);
+    this.scene.add(bgMesh);
   };
 
   createFloorMaterial = () => {
@@ -344,12 +535,22 @@ export default class Experience {
     const texture = textureLoader.load("/texture.jpg");
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(16, 16);
-
+    texture.repeat.set(8, 8);
     const material = new THREE.MeshStandardMaterial({
       map: texture,
     });
+    return material;
+  };
 
+  createWallMaterial = () => {
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load("/wall_texture.jpg");
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(12, 12);
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+    });
     return material;
   };
 
@@ -367,7 +568,6 @@ export default class Experience {
     //   this.cannonDebugger.update();
     // }
 
-    console.log(this.world.broadphase);
     this.world.fixedStep();
   };
 }
